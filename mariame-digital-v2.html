@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mariame Digital — IA & Automatisation</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#06080f;--bg2:#0b0f1a;--bg3:#0f1422;
+  --cyan:#00ffd1;--violet:#a78bfa;--violet2:#7c3aed;
+  --text:#e8eaf6;--muted:#6b7280;--border:rgba(167,139,250,0.15);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;}
+
+nav{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.1rem 2.5rem;background:rgba(6,8,15,0.9);backdrop-filter:blur(12px);border-bottom:0.5px solid var(--border);}
+.logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(90deg,var(--violet),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-links{display:flex;gap:2rem;}
+.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--cyan);}
+.nav-cta{background:var(--violet2);color:#fff;border:none;border-radius:8px;padding:.55rem 1.2rem;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.nav-cta:hover{background:#6d28d9;}
+
+#hero-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+.hero{position:relative;min-height:92vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem 2rem;overflow:hidden;border-bottom:0.5px solid var(--border);}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:var(--cyan);background:rgba(0,255,209,0.08);border:0.5px solid rgba(0,255,209,0.25);border-radius:20px;padding:5px 16px;margin-bottom:1.75rem;letter-spacing:.08em;}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(36px,6vw,66px);font-weight:800;line-height:1.08;margin-bottom:1.25rem;max-width:780px;}
+.hero h1 .accent{background:linear-gradient(135deg,var(--violet),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero p{font-size:17px;color:var(--muted);max-width:520px;margin:0 auto 2.25rem;font-weight:300;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{background:linear-gradient(135deg,var(--violet2),#0f6e56);color:#fff;border:none;border-radius:10px;padding:.8rem 1.75rem;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .2s,transform .15s;}
+.btn-primary:hover{opacity:.9;transform:translateY(-1px);}
+.btn-ghost{background:transparent;color:var(--violet);border:0.5px solid rgba(167,139,250,0.35);border-radius:10px;padding:.8rem 1.75rem;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s;}
+.btn-ghost:hover{background:rgba(167,139,250,0.08);}
+.hero-stats{display:flex;gap:2.5rem;justify-content:center;margin-top:3.5rem;flex-wrap:wrap;}
+.hero-stat .val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;background:linear-gradient(135deg,var(--violet),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-stat .lbl{font-size:12px;color:var(--muted);}
+
+section{padding:5rem 2.5rem;}
+.section-inner{max-width:1000px;margin:0 auto;}
+.section-tag{font-size:11px;letter-spacing:.12em;color:var(--cyan);font-weight:500;margin-bottom:.4rem;}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(22px,3.5vw,34px);font-weight:800;color:#f0f0ff;margin-bottom:.4rem;}
+.section-sub{font-size:15px;color:var(--muted);margin-bottom:2.5rem;font-weight:300;}
+
+#services{background:var(--bg2);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;}
+.service-card{background:var(--bg3);border:0.5px solid var(--border);border-radius:14px;padding:1.5rem;transition:border-color .2s,transform .2s;}
+.service-card:hover{border-color:rgba(167,139,250,0.45);transform:translateY(-3px);}
+.s-icon{width:44px;height:44px;border-radius:10px;background:rgba(167,139,250,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;}
+.s-icon svg{width:20px;height:20px;stroke:var(--violet);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.service-card h3{font-size:15px;font-weight:500;color:#f0f0ff;margin-bottom:6px;}
+.service-card p{font-size:13px;color:var(--muted);line-height:1.55;}
+
+#portfolio{background:var(--bg);}
+.featured-project{background:var(--bg2);border:1.5px solid rgba(0,255,209,0.3);border-radius:16px;padding:2rem;margin-bottom:2rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center;}
+.featured-badge-tag{display:inline-block;font-size:10px;font-weight:500;background:rgba(0,255,209,0.1);color:var(--cyan);border:0.5px solid rgba(0,255,209,0.3);border-radius:20px;padding:3px 12px;margin-bottom:.75rem;letter-spacing:.08em;}
+.featured-project h3{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#f0f0ff;margin-bottom:.5rem;}
+.featured-project p{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:1rem;}
+.featured-thumb{height:180px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:48px;font-weight:800;background:linear-gradient(135deg,#021a14,#053d2a);color:var(--cyan);}
+.stack-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:.5rem;}
+.pill{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(167,139,250,0.1);color:var(--violet);border:0.5px solid rgba(167,139,250,0.2);}
+.pill.cyan{background:rgba(0,255,209,0.08);color:var(--cyan);border-color:rgba(0,255,209,0.2);}
+
+.portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;}
+.project-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s;}
+.project-card:hover{transform:translateY(-4px);border-color:rgba(167,139,250,0.35);}
+.project-thumb{height:90px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
+.t-purple{background:linear-gradient(135deg,#120d1f,#2d1a5e);color:var(--violet);}
+.t-teal{background:linear-gradient(135deg,#021a14,#053d2a);color:var(--cyan);}
+.t-orange{background:linear-gradient(135deg,#1a0a04,#3d1a06);color:#fb923c;}
+.t-blue{background:linear-gradient(135deg,#04142a,#0a2d5e);color:#60a5fa;}
+.t-pink{background:linear-gradient(135deg,#1a041a,#3d0a3d);color:#f472b6;}
+.t-green{background:linear-gradient(135deg,#041a04,#0a3d0a);color:#4ade80;}
+.project-body{padding:1rem 1.25rem;}
+.project-body h3{font-size:14px;font-weight:500;color:#f0f0ff;margin-bottom:4px;}
+.project-body p{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:8px;}
+.tags{display:flex;flex-wrap:wrap;gap:4px;}
+.tag{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:500;}
+.tag-v{background:rgba(167,139,250,0.1);color:var(--violet);}
+.tag-c{background:rgba(0,255,209,0.07);color:var(--cyan);}
+.tag-o{background:rgba(251,146,60,0.1);color:#fb923c;}
+.tag-b{background:rgba(96,165,250,0.1);color:#60a5fa;}
+.tag-p{background:rgba(244,114,182,0.1);color:#f472b6;}
+.tag-g{background:rgba(74,222,128,0.1);color:#4ade80;}
+
+#pricing{background:var(--bg2);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.price-card{background:var(--bg3);border:0.5px solid var(--border);border-radius:14px;padding:1.5rem;position:relative;}
+.price-card.featured{border:1.5px solid var(--violet2);}
+.featured-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--violet2);color:#fff;font-size:10px;font-weight:500;padding:3px 14px;border-radius:20px;white-space:nowrap;}
+.price-name{font-size:12px;color:var(--muted);margin-bottom:6px;}
+.price-amount{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#f0f0ff;margin-bottom:4px;}
+.price-amount span{font-size:13px;font-weight:300;color:var(--muted);font-family:'DM Sans',sans-serif;}
+.price-desc{font-size:12px;color:var(--muted);margin-bottom:1.1rem;line-height:1.5;}
+.price-features{list-style:none;font-size:13px;color:#9ca3af;}
+.price-features li{padding:4px 0;display:flex;align-items:center;gap:7px;}
+.price-features li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--cyan);flex-shrink:0;}
+
+#about{background:var(--bg);}
+.about-grid{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:start;}
+.avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--violet2),#0f6e56);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;flex-shrink:0;border:2px solid rgba(167,139,250,0.3);}
+.about-text h3{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#f0f0ff;margin-bottom:4px;}
+.about-text .role{font-size:13px;color:var(--cyan);margin-bottom:1rem;}
+.about-text p{font-size:15px;color:var(--muted);line-height:1.7;font-weight:300;max-width:560px;}
+.about-stats{display:flex;gap:2rem;margin-top:1.5rem;flex-wrap:wrap;}
+.astat .val{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;background:linear-gradient(135deg,var(--violet),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.astat .lbl{font-size:11px;color:var(--muted);}
+.stack-section{margin-top:2rem;}
+.stack-section p{font-size:13px;color:var(--muted);margin-bottom:.75rem;}
+.stack-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.stack-item{font-size:12px;padding:4px 12px;border-radius:6px;background:var(--bg2);border:0.5px solid var(--border);color:var(--muted);}
+
+#contact{background:var(--bg2);border-top:0.5px solid var(--border);}
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+.contact-info h3{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#f0f0ff;margin-bottom:.75rem;}
+.contact-info p{font-size:14px;color:var(--muted);line-height:1.7;font-weight:300;margin-bottom:1.5rem;}
+.contact-detail{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);margin-bottom:8px;}
+.contact-detail svg{width:15px;height:15px;stroke:var(--cyan);fill:none;stroke-width:1.5;flex-shrink:0;}
+.contact-form-wrap{background:var(--bg3);border:0.5px solid var(--border);border-radius:14px;padding:1.75rem;}
+.form-group{margin-bottom:12px;}
+.form-group label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:var(--bg);border:0.5px solid rgba(167,139,250,0.2);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:.65rem 1rem;outline:none;transition:border-color .2s;}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--violet);}
+.form-group textarea{height:95px;resize:none;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.submit-btn{width:100%;background:linear-gradient(135deg,var(--violet2),#0f6e56);color:#fff;border:none;border-radius:10px;padding:.85rem;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:4px;}
+.submit-btn:hover{opacity:.88;}
+.form-success{display:none;text-align:center;padding:1.5rem;color:var(--cyan);font-size:15px;font-weight:500;}
+
+footer{background:var(--bg);border-top:0.5px solid var(--border);padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-logo{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;background:linear-gradient(90deg,var(--violet),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+footer p{font-size:12px;color:var(--muted);}
+.footer-links a{font-size:12px;color:var(--muted);text-decoration:none;margin-left:1.5rem;}
+.footer-links a:hover{color:var(--cyan);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.hero-badge,.hero h1,.hero p,.hero-btns,.hero-stats{animation:fadeUp .7s ease both;}
+.hero h1{animation-delay:.1s;}.hero p{animation-delay:.2s;}.hero-btns{animation-delay:.3s;}.hero-stats{animation-delay:.45s;}
+
+@media(max-width:768px){
+  nav{padding:1rem 1.25rem;}.nav-links{display:none;}
+  section{padding:3.5rem 1.25rem;}
+  .featured-project{grid-template-columns:1fr;}
+  .about-grid{grid-template-columns:1fr;text-align:center;}
+  .avatar{margin:0 auto;}.about-stats{justify-content:center;}
+  .contact-wrap{grid-template-columns:1fr;}
+  footer{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Mariame Digital</div>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#pricing">Tarifs</a>
+    <a href="#about">À propos</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Discutons</button>
+</nav>
+
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-badge">IA & Automatisation — Île-de-France</div>
+  <h1>Votre business,<br><span class="accent">propulsé par l'IA</span></h1>
+  <p>Développeuse IA spécialisée en vision par ordinateur, NLP et automatisation. Je crée des outils concrets pour les PME, associations et collectivités.</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Démarrer un projet</button>
+    <button class="btn-ghost" onclick="document.getElementById('portfolio').scrollIntoView({behavior:'smooth'})">Voir mes 8 projets</button>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="val">8</div><div class="lbl">Projets IA livrés</div></div>
+    <div class="hero-stat"><div class="val">250€</div><div class="lbl">TJM</div></div>
+    <div class="hero-stat"><div class="val">10+</div><div class="lbl">Technologies maîtrisées</div></div>
+    <div class="hero-stat"><div class="val">100%</div><div class="lbl">Remote possible</div></div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="section-inner">
+    <div class="section-tag">CE QUE JE FAIS</div>
+    <div class="section-title">Mes services</div>
+    <div class="section-sub">Des solutions concrètes, pas du jargon tech.</div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="s-icon"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3>Vision par ordinateur</h3>
+        <p>Détection d'objets, reconnaissance d'images, analyse visuelle en temps réel avec YOLO et CNN.</p>
+      </div>
+      <div class="service-card">
+        <div class="s-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h3>Chatbots IA</h3>
+        <p>Assistants intelligents NLP pour répondre à vos clients ou guider vos équipes 24h/24.</p>
+      </div>
+      <div class="service-card">
+        <div class="s-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h3>Automatisation</h3>
+        <p>APIs FastAPI/Flask, automatisation de process, pointage intelligent, gain de temps opérationnel.</p>
+      </div>
+      <div class="service-card">
+        <div class="s-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+        <h3>Tableaux de bord</h3>
+        <p>Dashboards MongoDB, visualisation de données, suivi d'activité en temps réel.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="portfolio">
+  <div class="section-inner">
+    <div class="section-tag">MES RÉALISATIONS</div>
+    <div class="section-title">Portfolio</div>
+    <div class="section-sub">8 projets IA réels, construits avec de vraies technologies.</div>
+
+    <div class="featured-project">
+      <div>
+        <div class="featured-badge-tag">PROJET PHARE</div>
+        <h3>MIA — Détection de violences conjugales</h3>
+        <p>Application IA complète combinant vision par ordinateur (YOLO + CNN), synthèse vocale Azure Speech et quiz d'évaluation pour détecter et alerter en cas de violences. Analyse de photos, détection de blessures, connexion aux services d'urgence.</p>
+        <div class="stack-pills">
+          <span class="pill cyan">YOLO</span><span class="pill cyan">CNN</span><span class="pill cyan">Azure Speech</span><span class="pill">Flask</span><span class="pill">Python</span><span class="pill">Vision IA</span>
+        </div>
+      </div>
+      <div class="featured-thumb">🛡️</div>
+    </div>
+
+    <div class="portfolio-grid">
+      <div class="project-card">
+        <div class="project-thumb t-purple">Mosaiq</div>
+        <div class="project-body">
+          <h3>Mosaiq — Générateur de CV multilingue</h3>
+          <p>Outil IA de création de fiches CV personnalisées. Détection automatique de domaines, traduction universelle, synthèse vocale gTTS, dashboard MongoDB.</p>
+          <div class="tags"><span class="tag tag-v">Flask</span><span class="tag tag-v">MongoDB</span><span class="tag tag-v">NLP</span><span class="tag tag-v">gTTS</span></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb t-teal">LIA</div>
+        <div class="project-body">
+          <h3>LIA — Chatbot IA de guidage métier</h3>
+          <p>Assistant IA conversationnel guidant les utilisateurs étape par étape dans un logiciel métier. Propulsé par GPT-4o-mini avec gestion de contexte multi-tours.</p>
+          <div class="tags"><span class="tag tag-c">FastAPI</span><span class="tag tag-c">OpenAI GPT-4</span><span class="tag tag-c">Python</span></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb t-blue">Mar-IA-me</div>
+        <div class="project-body">
+          <h3>Mar-IA-me — Pointage intelligent</h3>
+          <p>Système de pointage par QR code inspiré de Manatime. Détection de retard, messages personnalisés, synthèse vocale, API REST complète.</p>
+          <div class="tags"><span class="tag tag-b">FastAPI</span><span class="tag tag-b">SQLite</span><span class="tag tag-b">QR Code</span><span class="tag tag-b">TTS</span></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb t-pink">MIA Bot</div>
+        <div class="project-body">
+          <h3>MIA Bot — Chatbot RH</h3>
+          <p>Chatbot RH entraîné avec TensorFlow/Keras et NLP. Répond aux questions sur congés, paie, formations et documents RH avec lemmatisation.</p>
+          <div class="tags"><span class="tag tag-p">TensorFlow</span><span class="tag tag-p">Keras</span><span class="tag tag-p">NLP</span><span class="tag tag-p">NLTK</span></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb t-orange">🍢</div>
+        <div class="project-body">
+          <h3>Momo Brochette — App commande</h3>
+          <p>Application web de commande en ligne pour un commerce de street food local. Interface simple, rapide et mobile-first.</p>
+          <div class="tags"><span class="tag tag-o">HTML/CSS/JS</span><span class="tag tag-o">Web App</span><span class="tag tag-o">Commerce local</span></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb t-green">Quiz IA</div>
+        <div class="project-body">
+          <h3>Quiz Culture IA — Évaluation salariés</h3>
+          <p>Quiz interactif 20 questions pour évaluer la culture IA des collaborateurs. Timer, score, classement, export JSON et confettis.</p>
+          <div class="tags"><span class="tag tag-g">JavaScript</span><span class="tag tag-g">Formation</span><span class="tag tag-g">Évaluation</span></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb t-blue" style="font-size:14px;padding:0 1rem;text-align:center;">KeurBotM-IA</div>
+        <div class="project-body">
+          <h3>KeurBotM-IA — Robot humanoïde maçon</h3>
+          <p>Robot bipède autonome pour la construction au Sénégal. Vision OpenCV pour reconnaissance et mesure de briques en temps réel, Jetson Orin, ROS 2, PyTorch, MoveIt. Budget prévisionnel 123 000€ — dossier investisseur disponible.</p>
+          <div class="tags"><span class="tag tag-b">OpenCV</span><span class="tag tag-b">PyTorch</span><span class="tag tag-b">ROS 2</span><span class="tag tag-b">Jetson Orin</span><span class="tag tag-b">Robotique</span></div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb t-purple" style="font-size:13px;">Portfolio IA</div>
+        <div class="project-body">
+          <h3>Portfolio — Robot parlant interactif</h3>
+          <p>Site portfolio avec robot parlant intégré utilisant la Web Speech API. Présentation vocale des projets avec contrôle vitesse et hauteur.</p>
+          <div class="tags"><span class="tag tag-v">HTML/CSS/JS</span><span class="tag tag-v">Speech API</span><span class="tag tag-v">Web</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="section-inner">
+    <div class="section-tag">INVESTISSEMENT</div>
+    <div class="section-title">Tarifs</div>
+    <div class="section-sub">Transparent et adapté à la taille de votre structure.</div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Journée conseil</div>
+        <div class="price-amount">250€ <span>/ jour</span></div>
+        <div class="price-desc">Audit, conseil et accompagnement IA pour votre structure.</div>
+        <ul class="price-features">
+          <li>Diagnostic numérique</li><li>Recommandations IA</li><li>Rapport livré</li><li>Disponibilité immédiate</li>
+        </ul>
+      </div>
+      <div class="price-card featured">
+        <div class="featured-badge">Le plus demandé</div>
+        <div class="price-name">Projet sur mesure</div>
+        <div class="price-amount">Sur <span>devis</span></div>
+        <div class="price-desc">Développement complet d'un outil IA adapté à vos besoins.</div>
+        <ul class="price-features">
+          <li>Chatbot ou app web</li><li>Vision par ordinateur</li><li>Automatisation process</li><li>Livraison clé en main</li>
+        </ul>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Accompagnement mensuel</div>
+        <div class="price-amount">Sur <span>demande</span></div>
+        <div class="price-desc">Suivi, maintenance et évolutions continues de vos outils.</div>
+        <ul class="price-features">
+          <li>Support prioritaire</li><li>Mises à jour incluses</li><li>Reporting mensuel</li><li>Évolutions illimitées</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-inner">
+    <div class="section-tag">QUI SUIS-JE</div>
+    <div class="section-title">À propos</div>
+    <div style="margin-top:1.5rem;" class="about-grid">
+      <div class="avatar">MS</div>
+      <div class="about-text">
+        <h3>Mariame Savane</h3>
+        <div class="role">Développeuse IA & Consultante Digitale Freelance</div>
+        <p>Basée en Île-de-France, je me suis spécialisée en intelligence artificielle et automatisation. J'ai construit 8 projets IA concrets couvrant la vision par ordinateur, le NLP, la synthèse vocale et l'automatisation — des solutions déployées pour de vraies structures.<br><br>Je crois que l'IA doit être simple, utile et accessible à tous — pas réservée aux grands groupes. Mon objectif : vous faire gagner du temps avec des outils taillés pour vous.</p>
+        <div class="about-stats">
+          <div class="astat"><div class="val">8</div><div class="lbl">Projets livrés</div></div>
+          <div class="astat"><div class="val">10+</div><div class="lbl">Technologies</div></div>
+          <div class="astat"><div class="val">100%</div><div class="lbl">Remote</div></div>
+        </div>
+        <div class="stack-section">
+          <p>Stack technique :</p>
+          <div class="stack-grid">
+            <span class="stack-item">Python</span><span class="stack-item">Flask</span><span class="stack-item">FastAPI</span><span class="stack-item">TensorFlow</span><span class="stack-item">YOLO</span><span class="stack-item">CNN</span><span class="stack-item">OpenAI GPT-4</span><span class="stack-item">MongoDB</span><span class="stack-item">SQLite</span><span class="stack-item">Azure Speech</span><span class="stack-item">NLP/NLTK</span><span class="stack-item">JavaScript</span><span class="stack-item">HTML/CSS</span><span class="stack-item">Git</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-tag">TRAVAILLONS ENSEMBLE</div>
+    <div class="section-title">Contact</div>
+    <div class="contact-wrap">
+      <div class="contact-info">
+        <h3>Un projet en tête ?<br>Parlons-en.</h3>
+        <p>Que vous soyez une PME, une association, un organisme de formation, une collectivité ou un commerce local — je suis disponible pour discuter de votre projet.</p>
+        <div class="contact-detail"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Île-de-France (remote possible)</div>
+        <div class="contact-detail"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1 19.79 19.79 0 0 1 1.61 4.5 2 2 0 0 1 3.6 2.32h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 17z"/></svg>Disponible immédiatement</div>
+        <div class="contact-detail"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3855594a5159555d4b594e59565d0d0a0d785f55595154165b5755">[email&#160;protected]</a></div>
+      </div>
+      <div class="contact-form-wrap">
+        <div class="form-row">
+          <div class="form-group"><label>Prénom</label><input type="text" id="c-prenom" placeholder="Marie"/></div>
+          <div class="form-group"><label>Email</label><input type="email" id="c-email" placeholder="marie@exemple.fr"/></div>
+        </div>
+        <div class="form-group">
+          <label>Type de structure</label>
+          <select id="c-type" style="background:#06080f;border:0.5px solid rgba(167,139,250,0.2);border-radius:8px;color:#e8eaf6;font-family:'DM Sans',sans-serif;font-size:14px;padding:.65rem 1rem;width:100%;outline:none;">
+            <option value="">Sélectionner...</option>
+            <option>PME / TPE</option><option>Association</option><option>Organisme de formation</option><option>Commerce local</option><option>Mairie / Collectivité</option><option>Autre</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Votre projet</label><textarea id="c-message" placeholder="Décrivez votre besoin en quelques mots..."></textarea></div>
+        <button class="submit-btn" onclick="submitForm()">Envoyer ma demande</button>
+        <div class="form-success" id="form-success">Message envoyé ! Je vous réponds sous 24h. 🎉</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Mariame Digital</div>
+  <p>© 2025 Mariame Digital — IA & Automatisation • Île-de-France</p>
+  <div class="footer-links">
+    <a href="https://www.malt.fr/profile/mariamesavane" target="_blank">Malt</a>
+    <a href="/cdn-cgi/l/email-protection#2c414d5e454d41495f4d5a4d4249191e196c4b414d4540024f4341">Email</a>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+function submitForm(){
+  const p=document.getElementById('c-prenom').value.trim();
+  const e=document.getElementById('c-email').value.trim();
+  const m=document.getElementById('c-message').value.trim();
+  if(!p||!e||!m){alert('Merci de remplir tous les champs obligatoires.');return;}
+  document.querySelector('.submit-btn').style.display='none';
+  document.getElementById('form-success').style.display='block';
+}
+const canvas=document.getElementById('hero-canvas');
+const ctx=canvas.getContext('2d');
+let balls=[];
+function resize(){canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;}
+resize();window.addEventListener('resize',resize);
+for(let i=0;i<22;i++){balls.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*3+1,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,color:Math.random()>.5?'rgba(167,139,250,':'rgba(0,255,209,',alpha:Math.random()*.5+.2});}
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  balls.forEach(b=>{b.x+=b.vx;b.y+=b.vy;if(b.x<0||b.x>canvas.width)b.vx*=-1;if(b.y<0||b.y>canvas.height)b.vy*=-1;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fillStyle=b.color+b.alpha+')';ctx.fill();});
+  balls.forEach((b,i)=>{balls.slice(
